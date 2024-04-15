@@ -111,7 +111,7 @@ const layers = {
         attribution: '&copy; <a href="usgs.gov" target="_blank">USGS</a>'
     }),
     linz: L.mapboxGL({
-        attribution: '&copy; <a href="//www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution" target="_blank">LINZ</a>',
+        attribution: '&copy; <a href=".//www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution" target="_blank">LINZ</a>',
         maxZoom: MAX_ZOOM,
         style: 'https://basemaps.linz.govt.nz/v1/tiles/topographic/EPSG:3857/style/topographic.json?api=d01fbtg0ar23gctac5m0jgyy2ds',
         interactive: true,
@@ -128,7 +128,7 @@ const layers = {
     linzTopo: L.tileLayer('https://tiles-cdn.koordinates.com/services;key=39a8b989633a4bef98bc0e065380454a/tiles/v4/layer=50767/EPSG:3857/{z}/{x}/{y}.png', {
         maxNativeZoom: 18,
         maxZoom: MAX_ZOOM,
-        attribution: '&copy; <a href="//www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution" target="_blank">LINZ</a>'
+        attribution: '&copy; <a href=".//www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution" target="_blank">LINZ</a>'
     }),
     waymarkedTrailsHiking: L.tileLayer('https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png', {
         maxNativeZoom: 18,

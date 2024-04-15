@@ -1,7 +1,7 @@
 ![logo of gpx.studio](res/logo.png)
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F1303GH)
 
-This repository contains the source code of the website [**gpx.studio**](https://gpx.studio), an online tool for GPX editing.
+This repository contains the source code of the website [**gpx.studio**](https://leaguecn.gitee.io/gpxmap), an online tool for GPX editing.
 
 ## Run the code
 
@@ -30,7 +30,7 @@ To play with the code locally:
 * Support for custom map layers
 * Google Drive integration and [add-on](https://gsuite.google.com/marketplace/app/gpxstudio_the_online_gpx_editor/666808960580): select a file, save the new version and get a shareable link as well as code to embed the map
 
-Read the [User Guide](https://gpx.studio/about.html#guide) for more details.
+Read the [User Guide](https://leaguecn.gitee.io/gpxmap/about.html#guide) for more details.
 
 ## Contributing
 

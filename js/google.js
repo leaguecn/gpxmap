@@ -228,7 +228,7 @@ export default class Google {
                 request.execute();
 
                 if (_this.completed == number) {
-                    var url = 'https://gpx.studio' + window.location.pathname.replace('index.html', '') + '?state=%7B%22ids%22:%5B%22';
+                    var url = 'https://leaguecn.gitee.io/gpxmap' + window.location.pathname.replace('index.html', '') + '?state=%7B%22ids%22:%5B%22';
                     for (var i = 0; i < _this.fileIds.length; i++) {
                         url += _this.fileIds[i];
                         if (i < _this.fileIds.length - 1) url += '%22,%22';

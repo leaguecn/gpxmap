@@ -319,7 +319,7 @@ export default class Total {
         const xmlStart3 = `</name>
     <author>
         <name>gpx.studio</name>
-        <link href="https://gpx.studio"></link>
+        <link href="https://leaguecn.gitee.io/gpxmap"></link>
     </author>
 </metadata>
 `;
@@ -502,7 +502,7 @@ export default class Total {
             }
 
             if (!mergeAll || this.traces.length == 1 || trace_idx !== undefined) {
-                var creator = this.traces[i].gpx._info.creator || "https://gpx.studio";
+                var creator = this.traces[i].gpx._info.creator || "https://leaguecn.gitee.io/gpxmap";
                 output.push({
                     name: this.traces[i].name + '.gpx',
                     text: (xmlStart1+creator+xmlStart2+this.encodeString(this.traces[i].name)+xmlStart3+waypointsOutput+xmlOutput+xmlEnd2)
@@ -513,7 +513,7 @@ export default class Total {
         }
 
         if (mergeAll && this.traces.length > 1) {
-            var creator = "https://gpx.studio";
+            var creator = "https://leaguecn.gitee.io/gpxmap";
             for (var i=0; i<this.traces.length; i++) {
                 if (this.traces[i].gpx._info.creator) {
                     creator = this.traces[i].gpx._info.creator;
