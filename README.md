@@ -1,7 +1,22 @@
 ![logo of gpx.studio](res/logo.png)
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F1303GH)
+<!--[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F1303GH)
+-->
+
 
 This repository contains the source code of the website [**gpx.studio**](https://leaguecn.gitee.io/gpxmap), an online tool for GPX editing.
+
+And Mod by Patrick, in Guangdong Province, Foshan City. on 2024-04-15.
+
+## Changelog
++ Most of the website functions are valid, for some reason, the auto routing function is broken or buggy now. I do not think it is good function, so I will not fix it in future. But I will remove the crack function one by one if I have some spare time.
++ Project is deployed in Gitee, so the GFW people can use it free now.
+
+![](https://gitee.com/leaguecn/gpxmap/raw/master/res/sample1.png)
+
+* * *
+
+
+> the following sections are port from source project: [gpxstudio](https://github.com/gpxstudio/gpxstudio.github.io), a tons of thanks for it!
 
 ## Run the code
 
