@@ -760,7 +760,8 @@ export default class Buttons {
                 _this.openLocalStorage();
             }
         }
-        xhr.open('GET', './res/config.json');
+        //xhr.open('GET', './res/config.json');
+        xhr.open('GET', '/gpxmap/res/config.json')
         xhr.send();
     }
 
