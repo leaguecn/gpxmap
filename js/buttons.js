@@ -438,33 +438,46 @@ export default class Buttons {
 
                     if (urlParams.has('source')) {
                         const mapSource = urlParams.get('source');
-                        if (mapSource == 'osm') layers.openStreetMap.addTo(_this.map);
-                        else if (mapSource == 'otm') layers.openTopoMap.addTo(_this.map);
+                        //if (mapSource == 'osm') layers.openStreetMap.addTo(_this.map);
+                        if (mapSource == 'otm') layers.openTopoMap.addTo(_this.map);
                         else if (mapSource == 'ohm') layers.openHikingMap.addTo(_this.map);
-                        else if (mapSource == 'outdoors' && urlParams.has('token') && _this.supportsWebGL()) _this.mapboxMap.addTo(_this.map);
-                        else if (mapSource == 'satellite' && urlParams.has('token') && _this.supportsWebGL()) {
-                            _this.mapboxMap.addTo(_this.map);
-                            _this.mapboxMap.options.style = "mapbox://styles/mapbox/satellite-v9";
-                            _this.mapboxMap.getMapboxMap().setStyle("mapbox://styles/mapbox/satellite-v9", { diff: false });
-                        } else layers.openStreetMap.addTo(_this.map);
+                        //else if (mapSource == 'outdoors' && urlParams.has('token') && _this.supportsWebGL()) _this.mapboxMap.addTo(_this.map);
+                        //else if (mapSource == 'satellite' && urlParams.has('token') && _this.supportsWebGL()) {
+                        //    _this.mapboxMap.addTo(_this.map);
+                        //    _this.mapboxMap.options.style = "mapbox://styles/mapbox/satellite-v9";
+                        //    _this.mapboxMap.getMapboxMap().setStyle("mapbox://styles/mapbox/satellite-v9", { diff: false });
+                        //} 
+                        else layers.openStreetMap.addTo(_this.map);
                     } else if (urlParams.has('token') && _this.supportsWebGL()) _this.mapboxMap.addTo(_this.map);
                     else layers.openStreetMap.addTo(_this.map);
 
                     if (urlParams.has('token') && _this.supportsWebGL()) {
                         _this.controlLayers = L.control.layers({
                             [_this.custom_style ? "Mapbox" : "Mapbox Outdoors"]: _this.mapboxMap,
-                            "Mapbox Satellite": _this.mapboxMap,
-                            "OpenStreetMap": layers.openStreetMap,
+                            //"Mapbox Satellite": _this.mapboxMap,
+                            //"OpenStreetMap": layers.openStreetMap,
                             "OpenTopoMap": layers.openTopoMap,
                             "OpenHikingMap": layers.openHikingMap,
+                            "ArcGIS Image": layers.arcGIS_Image,
+                            //"OmniScale": layers.omniScale,
+                            "MapTiler": layers.mapTiler,
+                            "TDVec": layers.TDVec,
+                            "TF-Transport": layers.TFTransport,
+                            "TF-Outdoor": layers.TFOutdoors,
                         }).addTo(_this.map);
 
                         _this.addSwitchMapboxLayers();
                     } else {
                         _this.controlLayers = L.control.layers({
-                            "OpenStreetMap": layers.openStreetMap,
+                            //"OpenStreetMap": layers.openStreetMap,
                             "OpenTopoMap": layers.openTopoMap,
                             "OpenHikingMap": layers.openHikingMap,
+                            "ArcGIS Image": layers.arcGIS_Image,
+                            //"OmniScale": layers.omniScale,
+                            "MapTiler": layers.mapTiler,
+                            "TDVec": layers.TDVec,
+                            "TF-Transport": layers.TFTransport,
+                            "TF-Outdoor": layers.TFOutdoors,
                         }).addTo(_this.map);
                     }
                 } else {
@@ -521,12 +534,18 @@ export default class Buttons {
                     var baselayersHierarchy = {};
                     baselayersHierarchy[_this.basemaps_text] = {};
                     baselayersHierarchy[_this.basemaps_text][_this.world_text] = {
-                        "Mapbox Outdoors": null,
-                        "Mapbox Satellite": null,
-                        "OpenStreetMap": layers.openStreetMap,
+                        //"Mapbox Outdoors": null,
+                        //"Mapbox Satellite": null,
+                        //"OpenStreetMap": layers.openStreetMap,
                         "OpenTopoMap": layers.openTopoMap,
                         "OpenHikingMap": layers.openHikingMap,
-                        "CyclOSM": layers.cyclOSM
+                        "CyclOSM": layers.cyclOSM,
+                        "ArcGIS Image": layers.arcGIS_Image,
+                        //"OmniScale": layers.omniScale,
+                        "MapTiler": layers.mapTiler,
+                        "TDVec": layers.TDVec,
+                        "TF-Transport": layers.TFTransport,
+                        "TF-Outdoor": layers.TFOutdoors
                     };
                     baselayersHierarchy[_this.basemaps_text][_this.countries_text] = {};
                     baselayersHierarchy[_this.basemaps_text][_this.countries_text][_this.bulgaria_text] = {
@@ -552,6 +571,10 @@ export default class Buttons {
                     var overlaysHierarchy = {};
                     overlaysHierarchy[_this.overlays_text] = {};
                     overlaysHierarchy[_this.overlays_text][_this.world_text] = {
+                        "Labels": {
+                            "TDMapLabel": layers.TDVecLabel
+                            //"MapTilerLabel": layers.mapTilerLabel,
+                        },
                         "CyclOSM Lite": layers.cyclOSMLite,
                         "Strava Heatmap": {
                             "All": layers.stravaHeatmapAll,
@@ -584,15 +607,25 @@ export default class Buttons {
                     var baselayerSelection = {};
                     baselayerSelection[_this.basemaps_text] = {};
                     baselayerSelection[_this.basemaps_text][_this.world_text] = {
-                        "OpenStreetMap": true,
+                        //"OpenStreetMap": true,
                         "OpenTopoMap": true,
                         "OpenHikingMap": true,
-                        "CyclOSM": true
+                        "CyclOSM": true,
+                        "ArcGIS Image": true,
+                        //"OmniScale": true,
+                        "MapTiler": true,
+                        "TDVec": true,
+                        "TF-Transport": true,
+                        "TF-Outdoor": true
                     };
 
                     var overlaySelection = {};
                     overlaySelection[_this.overlays_text] = {};
                     overlaySelection[_this.overlays_text][_this.world_text] = {
+                        "Labels": {
+                            "TDMapLabel": true
+                            //"MapTilerLabel": true
+                        },
                         "Strava Heatmap": {
                             "All": true,
                             "Ride": true,
@@ -612,6 +645,7 @@ export default class Buttons {
                     overlaySelection[_this.overlays_text][_this.world_text][_this.poi_text] = pointsOfInterestLayerSelection;
 
                     if (_this.supportsWebGL()) {
+                        /*
                         _this.mapboxMap = L.mapboxGL({
                             attribution: '&copy; <a href="https://www.mapbox.com/about/maps/" target="_blank">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
                             maxZoom: MAX_ZOOM,
@@ -629,6 +663,7 @@ export default class Buttons {
                             scrollZoom: false,
                             boxZoom: false
                         }).addTo(_this.map);
+
 
                         _this.mapboxMap.getMapboxMap().addControl(new MapboxLanguage({
                             defaultLanguage: getLanguage() == 'zh' ? 'zh-Hans' : getLanguage()
@@ -649,6 +684,7 @@ export default class Buttons {
                         baselayersHierarchy[_this.basemaps_text][_this.world_text]["Mapbox Satellite"] = _this.mapboxMap;
                         baselayerSelection[_this.basemaps_text][_this.world_text]["Mapbox Outdoors"] = true;
                         baselayerSelection[_this.basemaps_text][_this.world_text]["Mapbox Satellite"] = true;
+                        */
 
                         _this.mapillary_coverageZoomed = L.vectorGrid.protobuf('https://tiles.mapillary.com/maps/vtp/mly1_computed_public/2/{z}/{x}/{y}?access_token=MLY|4381405525255083|3204871ec181638c3c31320490f03011', {
                             minZoom: 14,
@@ -680,13 +716,15 @@ export default class Buttons {
                             },
                             rendererFactory: L.canvas.tile
                         });
+
+                        layers.arcGIS_Image.addTo(_this.map);
                     } else {
                         delete baselayersHierarchy[_this.basemaps_text][_this.world_text]["Mapbox Outdoors"];
                         delete baselayersHierarchy[_this.basemaps_text][_this.world_text]["Mapbox Satellite"];
                         delete baselayersHierarchy[_this.basemaps_text][_this.countries_text][_this.new_zealand_text];
 
                         layers.openStreetMap.addTo(_this.map);
-                    }
+                    }                   
 
                     for (var i = 0; i < _this.custom_layers.length; i++) {
                         const newLayer = L.tileLayer(_this.custom_layers[i].url, {
@@ -792,6 +830,7 @@ export default class Buttons {
                 }
             }
         }
+
     }
 
     updateStravaCookies() {

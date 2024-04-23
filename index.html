@@ -151,7 +151,9 @@
                 <table class="panels">
                     <tr>
                         <td><b>Activity</b></td>
-                        <td><select name="activity" id="activity-input" class="close-spacing">
+                        <td><select name="activity" id="activity-input" class="close-spacing">                            
+                            <!--
+                            <option value="Hiking-Alpine-SAC6">Run/hike</option>
                             <option value="Trekking-dry">Bike</option>
                             <option value="fastbike">Racing bike</option>
                             <option value="MTB">Mountain bike</option>
@@ -159,6 +161,20 @@
                             <option value="Car-FastEco">Motorcycle</option>
                             <option value="river">Water</option>
                             <option value="rail">Railway</option>
+                            -->
+                            <!-- https://docs.graphhopper.com/#section/Map-Data-and-Routing-Profiles/OpenStreetMap -->
+                            <option value="car">Car</option>
+                            <option value="car_avoid_ferry">Car avoid ferry</option>
+                            <option value="car_avoid_motorway">Car avoid motorway</option>
+                            <option value="car_avoid_toll">Car avoid toll</option>
+                            <option value="small_truck">Small truck</option>
+                            <option value="truck">Truck</option>
+                            <option value="scooter">Scooter</option>
+                            <option value="foot">Foot</option>
+                            <option value="hike">Hike</option>
+                            <option value="bike">Bike</option>
+                            <option value="mtb">Mtb</option>
+                            <option value="racingbike">Racingbike</option>
                         </select></td>
                     </tr>
                     <tr>

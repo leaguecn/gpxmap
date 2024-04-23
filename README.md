@@ -13,6 +13,17 @@ And Mod by Patrick, in Guangdong Province, Foshan City. on 2024-04-15.
 
 ![](https://gitee.com/leaguecn/gpxmap/raw/master/res/sample1.png)
 
+
+
++ Add some tile layers for free.
++ fixed the routing functions.
+> 2024-04-23, Foshan Chancheng
+![](https://gitee.com/leaguecn/gpxmap/raw/master/res/sample2.png)
+
+
+
+
+> More go to https://leaguecn.gitee.io/gpxmap/
 * * *
 
 

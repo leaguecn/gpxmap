@@ -1,6 +1,133 @@
 const MAX_ZOOM = 22;
 
+async function fetchImage(url, callback, headers, abort) {
+    let _headers = {};
+    if (headers) {
+      headers.forEach(h => {
+        _headers[h.header] = h.value;
+      });
+    }
+    const controller = new AbortController();
+    const signal = controller.signal;
+    if (abort) {
+      abort.subscribe(() => {
+        controller.abort();
+      });
+    }
+    const f = await fetch(url, {
+      method: "GET",
+      headers: _headers,
+      mode: "cors",
+      signal: signal
+    });
+    const blob = await f.blob();
+    callback(blob);
+  }
+  
+  L.TileLayerWithHeaders = L.TileLayer.extend({
+    initialize: function (url, options, headers, abort) {
+      L.TileLayer.prototype.initialize.call(this, url, options);
+      this.headers = headers;
+      this.abort = abort;
+    },
+    createTile(coords, done) {
+      const url = this.getTileUrl(coords);
+      const img = document.createElement("img");
+      img.setAttribute("role", "presentation");
+  
+      fetchImage(
+        url,
+        resp => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            img.src = reader.result;
+          };
+          reader.readAsDataURL(resp);
+          done(null, img);
+        },
+        this.headers,
+        this.abort
+      );
+      return img;
+    }
+  });
+  
+  L.tileLayerWithHead = function (url, options, headers, abort) {
+    return new L.TileLayerWithHeaders(url, options, headers, abort);
+  };
+
 const layers = {
+    //********************************** invalid start **********************************
+    //https://maps.omniscale.net/v2/routeeditor-48f40b99/style.default/23/6830514/3643933.png
+    omniScale: L.tileLayerWithHead('https://maps.omniscale.net/v2/routeeditor-48f40b99/style.default/{z}/{x}/{y}.png', {
+        attribution: '& copy; <a href="https://maps.omniscale.com/" target="_blank">OmniScale</a>',
+        maxNativeZoom: 23,
+        maxZoom: MAX_ZOOM
+    },
+    [
+        {
+          header: 'Referer',
+          value: 'https://explorer.graphhopper.com/',
+        },
+      ],
+      null
+    ),
+    //https://api.maptiler.com/tiles/v3/4/13/6.pbf?key=wYonyRi2hNgJVH2qgs81
+    mapTilerLabel: new L.vectorGrid.protobuf('https://api.maptiler.com/tiles/v3/{z}/{x}/{y}.pbf?key=wYonyRi2hNgJVH2qgs81', {
+        minZoom: 1,
+        maxNativeZoom: 20,
+        pane: 'overlayPane',
+        attribution: '& copy; <a href="https://docs.maptiler.com/cloud/api" target="_blank">MapTiler</a>',
+        vectorTileLayerStyles: {
+            sequence: {
+                color: 'rgb(53, 175, 109)',
+                weight: 1,
+                opacity: 0.6
+            },
+            image: []
+        }
+    }),
+    //********************************** invalid end **********************************
+
+    //********************************** valid start **********************************
+    //https://a.tile.thunderforest.com/transport/17/106720/56923.png?apikey=95b7c76e19c04e36ab9756f2cdf15b32
+    TFTransport: L.tileLayer('https://a.tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey=95b7c76e19c04e36ab9756f2cdf15b32', {
+        attribution: '& copy; <a href="https://www.thunderforest.com/" target="_blank"></a>',
+        maxNativeZoom: 20,
+        maxZoom: MAX_ZOOM
+    }),
+    //https://b.tile.thunderforest.com/outdoors/17/106719/56926.png?apikey=95b7c76e19c04e36ab9756f2cdf15b32
+    TFOutdoors: L.tileLayer('https://b.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=95b7c76e19c04e36ab9756f2cdf15b32', {
+        attribution: '& copy; <a href="https://www.thunderforest.com/" target="_blank"></a>',
+        maxNativeZoom: 20,
+        maxZoom: MAX_ZOOM
+    }),
+    //https://t4.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX=11&TILEROW=888&TILECOL=1669&tk=b88bfb160c81dab8d9d20aaa74846360
+    TDVecLabel: L.tileLayer('https://t4.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=b88bfb160c81dab8d9d20aaa74846360',{
+        attribution: '& copy; <a href="https://www.tianditu.gov.cn/" target="_blank">天地图</a>',
+        maxNativeZoom: 23,
+        maxZoom: MAX_ZOOM
+    }),
+    //https://t1.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX=11&TILEROW=887&TILECOL=1669&tk=b88bfb160c81dab8d9d20aaa74846360
+    TDVec: L.tileLayer('https://t1.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=b88bfb160c81dab8d9d20aaa74846360',{
+        attribution: '& copy; <a href="https://www.tianditu.gov.cn/" target="_blank">天地图</a>',
+        maxNativeZoom: 23,
+        maxZoom: MAX_ZOOM
+    }),
+    //https://api.maptiler.com/tiles/satellite-v2/2/0/0.jpg?key=wYonyRi2hNgJVH2qgs81
+    mapTiler: L.tileLayer('https://api.maptiler.com/tiles/satellite-v2/{z}/{x}/{y}.jpg?key=wYonyRi2hNgJVH2qgs81',{
+        attribution: '& copy; <a href="https://docs.maptiler.com/cloud/api" target="_blank">MapTiler</a>',
+        maxNativeZoom: 20,
+        maxZoom: MAX_ZOOM
+
+    }),
+    arcGIS_Image: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '& copy; <a href="https://doc.arcgis.com/zh-cn/arcgis-online/reference/display-copyrights.htm" target="_blank">Esri</a>',
+        maxNativeZoom: 20,
+        maxZoom: MAX_ZOOM
+    }),
+
+    //*********************************** valid end **********************************/
     openStreetMap: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
         maxNativeZoom: 19,

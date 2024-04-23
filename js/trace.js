@@ -1908,6 +1908,15 @@ export default class Trace {
     }
 
     addEndPoint(lat, lng) {
+
+        //const scale = 1000000;
+        //a.lat = Math.round(a.lat * scale) / scale;
+        //a.lng = Math.round(a.lng * scale) / scale;
+        //b.lat = Math.round(b.lat * scale) / scale;
+        //b.lng = Math.round(b.lng * scale) / scale;
+        //lat = lat.toFixed(6);
+        //lng = lng.toFixed(6);
+
         if (!this.visible) this.hideUnhide();
 
         this.save();
@@ -2413,6 +2422,9 @@ export default class Trace {
                 if (found == points.length) decodeElevation();
             } else { // request
                 this.buttons.terrain_cache.set(tile_id, true); // already set so only one query
+
+                // without key, so block it now
+                /*
                 const Http = new XMLHttpRequest();
                 Http.responseType = 'arraybuffer';
                 var url = 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-dem-v1/' + tile[2] + '/' + tile[0] + '/' + tile[1] + '@2x.pngraw?access_token=' + this.buttons.mapbox_token;
@@ -2436,11 +2448,13 @@ export default class Trace {
                         if (found == points.length) decodeElevation();
                     }
                 }
+                */
             }
         }
     }
 
     askRoute(a, b, c, layer) {
+        console.log(this.buttons.routing_url);
         const Http = new XMLHttpRequest();
         var url = this.buttons.routing_url + ((a.equals(b) || b.equals(c)) ?
             `?lonlats=${a.lng},${a.lat}|${c.lng},${c.lat}&profile=${this.buttons.activity}${this.buttons.private ? '-private' : ''}&alternativeidx=0&format=geojson` :
@@ -2513,13 +2527,50 @@ export default class Trace {
     }
 
     askRoute2(a, b, layer) {
+        const trace = this;       
+
         const Http = new XMLHttpRequest();
+        var url = 'https://graphhopper.com/api/1/route' + `?point=${a.lat},${a.lng}&point=${b.lat},${b.lng}&profile=${this.buttons.activity}&locale=cn&elevation=true&points_encoded=false&key=b16b1d60-3c8c-4cd6-bae6-07493f23e589`;
+        Http.open("GET", url);
+        Http.send();
+        Http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var ans = JSON.parse(this.responseText);
+                const new_points = [];
+                const distance = ans['paths'][0]["distance"];
+                const pts = ans['paths'][0]["points"]["coordinates"];
+                for(var i = 0; i < pts.length-1; i++){
+                    new_points.push(L.latLng(pts[i][1], pts[i][0]));
+                    new_points[i].meta = { time: null, original_time: false, ele: pts[i][2], surface: null };
+                    new_points[i].routing = true;                    
+                }
+                new_points.push(L.latLng(pts[pts.length-1][1] * .001 + b.lat * .999, pts[pts.length-1][0] * .001 + b.lng * .999));
+                //new_points.push(L.latLng(b.lat, b.lng));
+                new_points[pts.length-1].meta = { time: null, original_time: false, ele: pts[pts.length-1][2], surface: null };
+                new_points[pts.length-1].routing = true;     
+
+                new_points[0].routing = false;
+                new_points[new_points.length-1].routing = false;
+                // 返回精度有所降低：22.98062168180604,113.12261514365674->113.122608, 22.980634, 2.7                
+                trace.addRoute2(new_points, a, b, layer); 
+            }else{
+                trace.addRoute2([a, b], a, b, layer);
+            }
+        }
+        /*
+        const Http = new XMLHttpRequest();
+        //curl "https://graphhopper.com/api/1/route?point=22.97937,113.1192756&point=23.016599,113.194415&profile=car&locale=cn&elevation=true&points_encoded=false&key=b16b1d60-3c8c-4cd6-bae6-07493f23e589"
+        console.log("> profile: " + this.buttons.activity);
         var url = this.buttons.routing_url + `?lonlats=${a.lng},${a.lat}|${b.lng},${b.lat}&profile=${this.buttons.activity}${this.buttons.private ? '-private' : ''}&alternativeidx=0&format=geojson`;
         Http.open("GET", url);
         Http.send();
-
-        const trace = this;
-
+        //Trekking-dry
+        //fastbike
+        //MTB
+        //Hiking-Alpine-SAC6
+        //Car-FastEco
+        //river
+        //rail
         Http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 var ans = JSON.parse(this.responseText);
@@ -2558,11 +2609,12 @@ export default class Trace {
                 }
                 new_points[0].routing = false;
                 new_points[new_points.length - 1].routing = false;
-                trace.addRoute2(new_points, a, b, layer);
+                trace.addRoute2(new_points, a, b, layer); 
             } else if (this.readyState == 4) {
                 trace.addRoute2([a, b], a, b, layer);
-            }
+            }            
         }
+        */
     }
 
     addRoute2(new_points, a, b, layer) {
