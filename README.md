@@ -12,14 +12,20 @@ Move to github on 2024-08-11.
 ## Changelog
 + Most of the website functions are valid, for some reason, the auto routing function is broken or buggy now. I do not think it is good function, so I will not fix it in future. But I will remove the crack function one by one if I have some spare time.
 + ~roject is deployed in Gitee, so the GFW people can use it free on.~
-![](https:/github.com/leaguecn/gpxmap/raw/master/res/sample1.png)
+<!--![](https:/github.com/leaguecn/gpxmap/raw/master/res/sample1.png) -->
+
+![](https://github.com/leaguecn/gpxmap/blob/master/res/sample1.png?raw=true)
 
 
 
 + Add some tile layers for free.
 + fixed the routing functions.
 > 2024-04-23, Foshan Chancheng
-![](https:/github.com/leaguecn/gpxmap/raw/master/res/sample2.png)
+> 2024-08-11, Foshan Chancheng
+
+<!--![](https:/github.com/leaguecn/gpxmap/raw/master/res/sample2.png) -->
+
+![](https://github.com/leaguecn/gpxmap/blob/master/res/sample2.png?raw=true)
 
 
 
