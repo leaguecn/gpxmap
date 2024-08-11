@@ -2539,6 +2539,10 @@ export default class Trace {
                 const new_points = [];
                 const distance = ans['paths'][0]["distance"];
                 const pts = ans['paths'][0]["points"]["coordinates"];
+                
+                pts[0][1]=a.lat;
+                pts[0][0]=a.lng;
+
                 for(var i = 0; i < pts.length-1; i++){
                     new_points.push(L.latLng(pts[i][1], pts[i][0]));
                     new_points[i].meta = { time: null, original_time: false, ele: pts[i][2], surface: null };
