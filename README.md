@@ -3,27 +3,29 @@
 -->
 
 
-This repository contains the source code of the website [**gpx.studio**](https://leaguecn.gitee.io/gpxmap), an online tool for GPX editing.
+This repository contains the source code of the website [**gpx.studio**](https://leaguecn.github.io/gpxmap), an online tool for GPX editing.
 
 And Mod by Patrick, in Guangdong Province, Foshan City. on 2024-04-15.
 
+Move to github on 2024-08-11.
+
 ## Changelog
 + Most of the website functions are valid, for some reason, the auto routing function is broken or buggy now. I do not think it is good function, so I will not fix it in future. But I will remove the crack function one by one if I have some spare time.
-+ Project is deployed in Gitee, so the GFW people can use it free now.
-
-![](https://gitee.com/leaguecn/gpxmap/raw/master/res/sample1.png)
++ ~roject is deployed in Gitee, so the GFW people can use it free on.~
+![](https:/github.com/leaguecn/gpxmap/raw/master/res/sample1.png)
 
 
 
 + Add some tile layers for free.
 + fixed the routing functions.
 > 2024-04-23, Foshan Chancheng
-![](https://gitee.com/leaguecn/gpxmap/raw/master/res/sample2.png)
+![](https:/github.com/leaguecn/gpxmap/raw/master/res/sample2.png)
 
 
 
 
-> More go to https://leaguecn.gitee.io/gpxmap/
+> More go to https://leaguecn.github.io/gpxmap
+
 * * *
 
 
