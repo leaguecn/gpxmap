@@ -2530,9 +2530,9 @@ export default class Trace {
         const trace = this;       
         const Http = new XMLHttpRequest();		
 		// car,bike,hike
-		if(${this.buttons.activity}=='car' 
-			|| ${this.buttons.activity}=='bike'
-			|| ${this.buttons.activity}=='hike'){
+		if(this.buttons.activity=='car' 
+			|| this.buttons.activity=='bike'
+			|| this.buttons.activity=='hike'){
 			// post api address: http://61.142.240.214:8000/route?key=
 			var urlApi = 'http://61.142.240.214:8000/route?key=';
 			Http.open('POST', urlApi);
