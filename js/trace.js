@@ -2528,97 +2528,53 @@ export default class Trace {
 
     askRoute2(a, b, layer) {
         const trace = this;       
+        const Http = new XMLHttpRequest();		
+		// car,bike,hike
+		if(${this.buttons.activity}=='car' 
+			|| ${this.buttons.activity}=='bike'
+			|| ${this.buttons.activity}=='hike'){
+			// post api address: http://61.142.240.214:8000/route?key=
+			var urlApi = 'http://61.142.240.214:8000/route?key=';
+			Http.open('POST', urlApi);
+			Http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			// json paras: {"points":[[113.16642573862575,22.961071876478158],[113.25586131601831,22.988018533936255]],
+			//"profile":"car","elevation":true,"instructions":true,"locale":"zh_CN","points_encoded":false,"snap_preventions":["ferry"],"details":["road_class","road_environment","max_speed","average_speed"]}
+			var jsonPar = `{"points":[[${a.lng},${a.lat}],[${b.lng},${b.lat}]],"profile":"${this.buttons.activity}",` + '"elevation":true,"instructions":true,"locale":"zh_CN","points_encoded":false}';
+			Http.send(jsonPar);
+		}else{
+			var url = 'https://graphhopper.com/api/1/route' + `?point=${a.lat},${a.lng}&point=${b.lat},${b.lng}&profile=${this.buttons.activity}&locale=cn&elevation=true&points_encoded=false&key=b16b1d60-3c8c-4cd6-bae6-07493f23e589`;
+			Http.open("GET", url);
+			Http.send();
+		}
+		Http.onreadystatechange = function () {
+			if (this.readyState == 4 && this.status == 200) {
+				var ans = JSON.parse(this.responseText);
+				const new_points = [];
+				const distance = ans['paths'][0]["distance"];
+				const pts = ans['paths'][0]["points"]["coordinates"];
+				
+				pts[0][1]=a.lat;
+				pts[0][0]=a.lng;
 
-        const Http = new XMLHttpRequest();
-        var url = 'https://graphhopper.com/api/1/route' + `?point=${a.lat},${a.lng}&point=${b.lat},${b.lng}&profile=${this.buttons.activity}&locale=cn&elevation=true&points_encoded=false&key=b16b1d60-3c8c-4cd6-bae6-07493f23e589`;
-        Http.open("GET", url);
-        Http.send();
-        Http.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var ans = JSON.parse(this.responseText);
-                const new_points = [];
-                const distance = ans['paths'][0]["distance"];
-                const pts = ans['paths'][0]["points"]["coordinates"];
-                
-                pts[0][1]=a.lat;
-                pts[0][0]=a.lng;
+				for(var i = 0; i < pts.length-1; i++){
+					new_points.push(L.latLng(pts[i][1], pts[i][0]));
+					new_points[i].meta = { time: null, original_time: false, ele: pts[i][2], surface: null };
+					new_points[i].routing = true;                    
+				}
+				new_points.push(L.latLng(pts[pts.length-1][1] * .001 + b.lat * .999, pts[pts.length-1][0] * .001 + b.lng * .999));
+				//new_points.push(L.latLng(b.lat, b.lng));
+				new_points[pts.length-1].meta = { time: null, original_time: false, ele: pts[pts.length-1][2], surface: null };
+				new_points[pts.length-1].routing = true;     
 
-                for(var i = 0; i < pts.length-1; i++){
-                    new_points.push(L.latLng(pts[i][1], pts[i][0]));
-                    new_points[i].meta = { time: null, original_time: false, ele: pts[i][2], surface: null };
-                    new_points[i].routing = true;                    
-                }
-                new_points.push(L.latLng(pts[pts.length-1][1] * .001 + b.lat * .999, pts[pts.length-1][0] * .001 + b.lng * .999));
-                //new_points.push(L.latLng(b.lat, b.lng));
-                new_points[pts.length-1].meta = { time: null, original_time: false, ele: pts[pts.length-1][2], surface: null };
-                new_points[pts.length-1].routing = true;     
+				new_points[0].routing = false;
+				new_points[new_points.length-1].routing = false;
+				// 返回精度有所降低：22.98062168180604,113.12261514365674->113.122608, 22.980634, 2.7                
+				trace.addRoute2(new_points, a, b, layer); 
+			}else{
+				trace.addRoute2([a, b], a, b, layer);
+			}
+		}
 
-                new_points[0].routing = false;
-                new_points[new_points.length-1].routing = false;
-                // 返回精度有所降低：22.98062168180604,113.12261514365674->113.122608, 22.980634, 2.7                
-                trace.addRoute2(new_points, a, b, layer); 
-            }else{
-                trace.addRoute2([a, b], a, b, layer);
-            }
-        }
-        /*
-        const Http = new XMLHttpRequest();
-        //curl "https://graphhopper.com/api/1/route?point=22.97937,113.1192756&point=23.016599,113.194415&profile=car&locale=cn&elevation=true&points_encoded=false&key=b16b1d60-3c8c-4cd6-bae6-07493f23e589"
-        console.log("> profile: " + this.buttons.activity);
-        var url = this.buttons.routing_url + `?lonlats=${a.lng},${a.lat}|${b.lng},${b.lat}&profile=${this.buttons.activity}${this.buttons.private ? '-private' : ''}&alternativeidx=0&format=geojson`;
-        Http.open("GET", url);
-        Http.send();
-        //Trekking-dry
-        //fastbike
-        //MTB
-        //Hiking-Alpine-SAC6
-        //Car-FastEco
-        //river
-        //rail
-        Http.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var ans = JSON.parse(this.responseText);
-                const new_pts = ans.features[0].geometry.coordinates;
-                const lngIdx = ans.features[0].properties.messages[0].indexOf("Longitude");
-                const latIdx = ans.features[0].properties.messages[0].indexOf("Latitude");
-                const tagIdx = ans.features[0].properties.messages[0].indexOf("WayTags");
-                var messageIdx = 1;
-                var surface = getSurface(ans.features[0].properties.messages[messageIdx][tagIdx]);
-
-                const new_points = [];
-                var j = 0;
-                for (var i = 0; i < new_pts.length; i++) {
-                    if (new_pts[i].length == 2) { // unknown elevation (eg in tunnels)
-                        for (var j = i - 1; j >= 0 && new_pts[i].length == 2; j--) {
-                            if (new_pts[j].length == 3) new_pts[i].push(new_pts[j][2]);
-                        }
-                        for (var j = i + 1; j < new_pts.length && new_pts[i].length == 2; j++) {
-                            if (new_pts[j].length == 3) new_pts[i].push(new_pts[j][2]);
-                        }
-                        if (new_pts[i].length == 2) new_pts[i].push(0);
-                    }
-
-                    new_points.push(L.latLng(new_pts[i][1], new_pts[i][0]));
-
-                    if (messageIdx < ans.features[0].properties.messages.length &&
-                        new_points[i].lng == Number(ans.features[0].properties.messages[messageIdx][lngIdx]) / 1000000 &&
-                        new_points[i].lat == Number(ans.features[0].properties.messages[messageIdx][latIdx]) / 1000000) {
-                        messageIdx++;
-                        if (messageIdx == ans.features[0].properties.messages.length) surface = "missing";
-                        else surface = getSurface(ans.features[0].properties.messages[messageIdx][tagIdx]);
-                    }
-
-                    new_points[i].meta = { time: null, original_time: false, ele: new_pts[i][2], surface: surface };
-                    new_points[i].routing = true;
-                }
-                new_points[0].routing = false;
-                new_points[new_points.length - 1].routing = false;
-                trace.addRoute2(new_points, a, b, layer); 
-            } else if (this.readyState == 4) {
-                trace.addRoute2([a, b], a, b, layer);
-            }            
-        }
-        */
     }
 
     addRoute2(new_points, a, b, layer) {
