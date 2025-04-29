@@ -31,6 +31,7 @@ Move to github on 2024-08-11.
 
 
 > More go to https://leaguecn.github.io/gpxmap
+> Or https://leeblog.geomapp.space/gpxmap/
 
 * * *
 
